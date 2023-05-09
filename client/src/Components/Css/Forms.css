@@ -1,0 +1,24 @@
+.basic-form {
+    display: flex;
+    flex-direction: column;
+}
+.basic-form label {
+    text-align: left;
+    margin: 5px 0px;
+}
+.basic-form input {
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    margin-bottom: 10px;
+}
+.basic-form .switch {
+    font-size: 14px;
+    font-style: italic;
+    text-align: left;
+    margin-top: 5px;
+    color: #bbb;
+}
+.basic-form .switch:hover {
+    color: #999;
+}

@@ -1,0 +1,13 @@
+.page-content {
+    width: 960px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.no-w {
+    width: auto;
+}
+
+.full-container {
+    height: 900px;
+}

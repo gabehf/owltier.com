@@ -1,0 +1,17 @@
+.sanfranciscoshock {
+    background-color: black;
+    background-image: url('../../assets/cards/sfs.png');
+    color: orange;
+}
+.houstonoutlaws {
+    background-color: rgb(39, 202, 69);
+    color: black;
+}
+.bostonuprising {
+    background-color: rgb(8, 51, 192);
+    color: white;
+}
+.losangelesgladiators {
+    background-color: rgb(110, 23, 223);
+    color: white;
+}

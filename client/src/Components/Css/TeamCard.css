@@ -1,0 +1,13 @@
+.team-card {
+    background-color: darkgray;
+    border-radius: 6px;
+    width: 260px;
+    height: 48px;
+    margin: 10px auto;
+}
+
+h3 {
+    text-align: left;
+    padding: 10px 0px 0px 15px;
+    margin: 0px;
+}
