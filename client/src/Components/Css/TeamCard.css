@@ -1,12 +1,18 @@
 .team-card {
     background-color: darkgray;
-    border-radius: 6px;
-    width: 260px;
+    border-radius: 15px;
+    width: 320px;
     height: 48px;
     margin: 10px auto;
+    cursor: grab;
+}
+
+.team-card:active {
+    cursor: grabbing;
 }
 
 h3 {
+    display: none;
     text-align: left;
     padding: 10px 0px 0px 15px;
     margin: 0px;

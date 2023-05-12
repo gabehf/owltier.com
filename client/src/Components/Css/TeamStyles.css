@@ -1,17 +1,81 @@
 .sanfranciscoshock {
     background-color: black;
     background-image: url('../../assets/cards/sfs.png');
-    color: orange;
 }
 .houstonoutlaws {
-    background-color: rgb(39, 202, 69);
-    color: black;
+    background-color: #97d700;
+    background-image: url('../../assets/cards/hou.png');
 }
 .bostonuprising {
-    background-color: rgb(8, 51, 192);
-    color: white;
+    background-color: #174b97;
+    background-image: url('../../assets/cards/bos.png');
+    
 }
 .losangelesgladiators {
+    background-color: #3c1053;
+    background-image: url('../../assets/cards/lag.png');  
+}
+.newyorkexcelsior {
+    background-color: rgb(0, 0, 0);
+    background-image: url('../../assets/cards/nyxl.png');
+}
+.washingtonjustice {
+    background-color: #990034;
+    background-image: url('../../assets/cards/was.png');
+}
+.vegaseternal {
+    background-color: rgb(15, 15, 15);
+    background-image: url('../../assets/cards/vegas.png');
+}
+.torontodefiant {
+    background-color: rgb(0, 0, 0);
+    background-image: url('../../assets/cards/tor.png');
+}
+.atlantareign {
+    background-color: #c4c4c4;
+    background-image: url('../../assets/cards/atl.png');
+}
+.floridamayhem {
+    background-color: #cf4691;
+    background-image: url('../../assets/cards/flo.png');
+}
+.londonspitfire {
+    background-color: #59cbe8;
+    background-image: url('../../assets/cards/lon.png');
+}
+.losangelesvaliant {
+    background-color: #1888c6;
+    background-image: url('../../assets/cards/lav.png');
+}
+.vancouvertitans {
+    background-color: #09226b;
+    background-image: url('../../assets/cards/vanc.png');
+}
+.seoulinfernal {
+    background-color: #d5253a;
+    background-image: url('../../assets/cards/sin.png');
+}
+.guangzhoucharge {
+    background-color: #00101d;
+    background-image: url('../../assets/cards/gzc.png');
+}
+.hangzhouspark {
+    background-color: #fb739b;
+    background-image: url('../../assets/cards/hzs.png');
+}
+.shanghaidragons {
+    background-color: #ff0000;
+    background-image: url('../../assets/cards/shd.png');
+}
+.dallasfuel {
+    background-color: #142840;
+    background-image: url('../../assets/cards/fuel.png');
+}
+.seouldynasty {
+    background-color: #ac8a00;
+    background-image: url('../../assets/cards/dyn.png');
+}
+.chengduhunters {
     background-color: rgb(110, 23, 223);
-    color: white;
+    background-image: url('../../assets/cards/lag.png');
 }
