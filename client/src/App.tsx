@@ -13,6 +13,7 @@ import SplitRegion from './Pages/Build/SplitRegion'
 import Combined from './Pages/Build/Combined'
 import NARegion from './Pages/Build/NARegion'
 import APACRegion from './Pages/Build/APACRegion'
+import CommunityRankings from './Pages/CommunityRankings'
 
 
 const router = createBrowserRouter(
@@ -28,6 +29,7 @@ const router = createBrowserRouter(
         <Route path='login' element={<Login />} />
         <Route path='register' element={<Register />} />
       </Route>
+      <Route path="community-rankings" element={<CommunityRankings />} />
     </Route>
   )
 )

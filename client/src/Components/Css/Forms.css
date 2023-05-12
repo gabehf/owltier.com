@@ -11,6 +11,8 @@
     border-radius: 10px;
     border: none;
     margin-bottom: 10px;
+    width: 300px;
+    font-size: 18px;
 }
 .basic-form .switch {
     font-size: 14px;

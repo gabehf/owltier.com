@@ -53,8 +53,9 @@ export default function SplitRegion() {
     return (
         <div style={{
             display: 'flex',
-            width: '800px',
-            justifyContent: 'space-between',
+            width: '500px',
+            gap: '30px',
+            margin: 'auto',
             }}>
             <DndContext
                 sensors={sensors}

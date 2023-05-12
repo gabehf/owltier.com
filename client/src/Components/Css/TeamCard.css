@@ -1,10 +1,13 @@
 .team-card {
     background-color: darkgray;
     border-radius: 15px;
-    width: 320px;
-    height: 48px;
-    margin: 10px auto;
+    /* width: 320px;
+    height: 48px; */
+    width: 240px;
+    height: 36px;
+    margin: -2px auto -2px auto;
     cursor: grab;
+    background-size: contain;
 }
 
 .team-card:active {

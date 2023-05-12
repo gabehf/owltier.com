@@ -49,14 +49,15 @@ export default function Combined() {
           })
         )
     return (
-        <div style={{
-            display: 'flex',
-            width: '600px',
-            height: '700px',
-            flexDirection: 'column',
-            flexWrap: 'wrap',
-            alignContent: 'space-between',
-            }}>
+        <div 
+            // style={{
+            // display: 'flex',
+            // flexDirection: 'column',
+            // flexWrap: 'wrap',
+            // height: '600px',
+            // width: '700px',
+            // }}
+        >
            <DndContext
                 sensors={sensors}
                 collisionDetection={closestCenter}

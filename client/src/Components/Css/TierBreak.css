@@ -1,0 +1,32 @@
+.triangle-right {
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-left: 16px solid grey;
+    border-bottom: 8px solid transparent;
+    margin: 0px 0px 0px -8px;
+    opacity: 0;
+}
+.triangle-right:hover {
+    cursor: pointer;
+    opacity: 1;
+}
+.triangle-right.active {
+    cursor: pointer;
+    border-left-color: yellow;
+    opacity: 1;
+}
+.break-line {
+    display: none;
+    width: 175px;
+    float: left;
+    margin-top: -9px;
+    border: 1px solid yellow;
+}
+.break-line.active {
+    display:inline;
+    width: 175px;
+    float: left;
+    margin-top: -9px;
+    border: 1px solid yellow;
+}
