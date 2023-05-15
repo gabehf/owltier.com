@@ -3,6 +3,7 @@
     width: 200px;
     display: flex;
     flex-direction: column;
+    margin-bottom: 35px;
 }
 .nav-right {
     align-items: flex-end;
@@ -21,4 +22,7 @@
     padding-bottom: 5px;
     border-bottom: 1px solid white;
     margin-bottom: 5px;
+}
+.pointer:hover {
+    cursor: pointer;
 }

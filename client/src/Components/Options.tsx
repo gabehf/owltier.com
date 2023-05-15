@@ -15,6 +15,7 @@ export default function Options(props: {current: string}) {
             items={Items} 
             current={props.current} 
             align='left'
+            internal
         />
     )
 }

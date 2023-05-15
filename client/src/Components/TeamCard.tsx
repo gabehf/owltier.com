@@ -3,11 +3,12 @@ import './Css/TeamStyles.css'
 import { useSortable } from '@dnd-kit/sortable'
 import {CSS} from '@dnd-kit/utilities'
 import TierBreak from './TierBreak'
+import { ListContext } from '../Pages/Build'
 
 // TODO figure out how to make transitions work smoothly
 
 
-export default function TeamCard(props: {id: string}) {
+export default function TeamCard(props: {id: string, listContext: ListContext, breakId: number}) {
     let teamCss = props.id.replaceAll(' ', '').toLowerCase()
     const {
         attributes,
@@ -28,7 +29,7 @@ export default function TeamCard(props: {id: string}) {
         <div className={`team-card ${teamCss}`} style={style} ref={setNodeRef} {...attributes} {...listeners}>
             <h3>{props.id}</h3>
         </div>
-        <TierBreak />
+        <TierBreak listContext={props.listContext} id={props.breakId} />
       </>
     )
 }

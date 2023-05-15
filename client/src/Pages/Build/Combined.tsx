@@ -14,33 +14,16 @@ import {
     useSensor,
     useSensors,
   } from '@dnd-kit/core';
-
-const teams = [
-    "San Francisco Shock",
-    "Houston Outlaws",
-    "Boston Uprising",
-    "Los Angeles Gladiators",
-    "New York Excelsior",
-    "Washington Justice",
-    "Vegas Eternal",
-    "Toronto Defiant",
-    "Atlanta Reign",
-    "Florida Mayhem",
-    "London Spitfire",
-    "Los Angeles Valiant",
-    "Vancouver Titans",
-    "Seoul Infernal",
-    "Guangzhou Charge",
-    "Hangzhou Spark",
-    "Shanghai Dragons",
-    "Dallas Fuel",
-    "Seoul Dynasty",
-    // "Chengdu Hunters"
-]
+import { ListContext } from '../Build';
+import { useOutletContext } from 'react-router-dom';
 
 // TODO fix styles
 
 export default function Combined() {
+    const lc = useOutletContext<ListContext>()
+    const [list, setList] = lc
+    const {na, apac} = list
+    const teams = na.concat(apac)
     const [items, setItems] = useState(teams)
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -48,16 +31,9 @@ export default function Combined() {
             coordinateGetter: sortableKeyboardCoordinates,
           })
         )
+    let breakId = 0
     return (
-        <div 
-            // style={{
-            // display: 'flex',
-            // flexDirection: 'column',
-            // flexWrap: 'wrap',
-            // height: '600px',
-            // width: '700px',
-            // }}
-        >
+        <div>
            <DndContext
                 sensors={sensors}
                 collisionDetection={closestCenter}
@@ -67,7 +43,10 @@ export default function Combined() {
                     items={items}
                     strategy={verticalListSortingStrategy}
                 >
-                        {items.map((id) => <TeamCard id={id} />)}
+                        {items.map((id) => {
+                            breakId++
+                            return <TeamCard id={id} listContext={lc} breakId={breakId} />
+                        })}
                 </SortableContext>
             </DndContext>
         </div>
@@ -81,7 +60,14 @@ export default function Combined() {
             const oldIndex = is.indexOf(active.id);
             const newIndex = is.indexOf(over.id);
             
-            return arrayMove(items, oldIndex, newIndex);
+            let narr = arrayMove(items, oldIndex, newIndex);
+            setList({
+                format: 'combined',
+                na: narr,
+                apac: list.apac,
+                breaks: list.breaks
+            })
+            return narr
           });
         }
     }

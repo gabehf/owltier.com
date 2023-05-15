@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, } from 'react'
 import TeamCard from '../../Components/TeamCard'
+import type { ListContext } from '../Build'
 import {
     arrayMove,
     SortableContext,
@@ -14,34 +15,12 @@ import {
     useSensor,
     useSensors,
   } from '@dnd-kit/core';
-
-const na = [
-     "San Francisco Shock",
-     "Houston Outlaws",
-     "Boston Uprising",
-     "Los Angeles Gladiators",
-     "New York Excelsior",
-     "Washington Justice",
-     "Vegas Eternal",
-     "Toronto Defiant",
-     "Atlanta Reign",
-     "Florida Mayhem",
-     "London Spitfire",
-     "Los Angeles Valiant",
-     "Vancouver Titans"
-]
-
-const apac = [
-    "Seoul Infernal",
-    "Guangzhou Charge",
-    "Hangzhou Spark",
-    "Shanghai Dragons",
-    "Dallas Fuel",
-    "Seoul Dynasty",
-    // "Chengdu Hunters",
-]
+import { useOutletContext } from 'react-router-dom';
 
 export default function SplitRegion() {
+    const lc = useOutletContext<ListContext>()
+    const [list, setList] = lc
+    const {na, apac} = list
     const [nateams, setNA] = useState(na)
     const [apacteams, setAPAC] = useState(apac)
     const sensors = useSensors(
@@ -50,6 +29,7 @@ export default function SplitRegion() {
             coordinateGetter: sortableKeyboardCoordinates,
           })
         )
+    let breakId = 0
     return (
         <div style={{
             display: 'flex',
@@ -67,7 +47,10 @@ export default function SplitRegion() {
                         items={nateams}
                         strategy={verticalListSortingStrategy}
                     >
-                            {nateams.map((id) => <TeamCard id={id} />)}
+                        {nateams.map((id) => {
+                            breakId += 1
+                            return <TeamCard listContext={lc} id={id} breakId={breakId}/>
+                        })}
                     </SortableContext>
                 </div>
             </DndContext>
@@ -81,7 +64,10 @@ export default function SplitRegion() {
                         items={apacteams}
                         strategy={verticalListSortingStrategy}
                     >
-                            {apacteams.map((id) => <TeamCard id={id} />)}
+                        {apacteams.map((id) => {
+                            breakId += 1
+                            return <TeamCard listContext={lc} id={id} breakId={breakId}/>
+                        })}
                     </SortableContext>
                 </div>
             </DndContext>
@@ -96,7 +82,14 @@ export default function SplitRegion() {
             const oldIndex = items.indexOf(active.id);
             const newIndex = items.indexOf(over.id);
             
-            return arrayMove(nateams, oldIndex, newIndex);
+            let narr = arrayMove(nateams, oldIndex, newIndex);
+            setList({
+                format: 'split',
+                na: narr,
+                apac: list.apac,
+                breaks: list.breaks
+            })
+            return narr
           });
         }
     }
@@ -109,7 +102,14 @@ export default function SplitRegion() {
             const oldIndex = items.indexOf(active.id);
             const newIndex = items.indexOf(over.id);
             
-            return arrayMove(apacteams, oldIndex, newIndex);
+            let narr = arrayMove(apacteams, oldIndex, newIndex);
+            setList({
+                format: 'split',
+                na: list.na,
+                apac: narr,
+                breaks: list.breaks
+            })
+            return narr
           });
         }
     }

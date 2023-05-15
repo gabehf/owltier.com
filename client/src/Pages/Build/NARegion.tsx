@@ -14,33 +14,23 @@ import {
     useSensor,
     useSensors,
   } from '@dnd-kit/core';
-
-const teams = [
-    "San Francisco Shock",
-    "Houston Outlaws",
-    "Boston Uprising",
-    "Los Angeles Gladiators",
-    "New York Excelsior",
-    "Washington Justice",
-    "Vegas Eternal",
-    "Toronto Defiant",
-    "Atlanta Reign",
-    "Florida Mayhem",
-    "London Spitfire",
-    "Los Angeles Valiant",
-    "Vancouver Titans",
-]
+import { ListContext } from '../Build';
+import { useOutletContext } from 'react-router-dom';
 
 // TODO fix styles
 
 export default function Combined() {
-    const [items, setItems] = useState(teams)
+    const lc = useOutletContext<ListContext>()
+    const [list, setList] = lc
+    const {na} = list
+    const [items, setItems] = useState(na)
     const sensors = useSensors(
         useSensor(PointerSensor),
         useSensor(KeyboardSensor, {
             coordinateGetter: sortableKeyboardCoordinates,
           })
         )
+    let breakId = 0
     return (
         <div>
            <DndContext
@@ -52,7 +42,10 @@ export default function Combined() {
                     items={items}
                     strategy={verticalListSortingStrategy}
                 >
-                        {items.map((id) => <TeamCard id={id} />)}
+                        {items.map((id) => {
+                            breakId += 1
+                            return <TeamCard id={id} listContext={lc} breakId={breakId} />
+                        })}
                 </SortableContext>
             </DndContext>
         </div>
@@ -66,7 +59,14 @@ export default function Combined() {
             const oldIndex = is.indexOf(active.id);
             const newIndex = is.indexOf(over.id);
             
-            return arrayMove(items, oldIndex, newIndex);
+            let narr = arrayMove(items, oldIndex, newIndex);
+            setList({
+                format: 'na',
+                na: narr,
+                apac: list.apac,
+                breaks: list.breaks
+            })
+            return narr
           });
         }
     }
