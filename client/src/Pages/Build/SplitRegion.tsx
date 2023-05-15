@@ -16,6 +16,7 @@ import {
     useSensors,
   } from '@dnd-kit/core';
 import { useOutletContext } from 'react-router-dom';
+import TierBreak from '../../Components/TierBreak';
 
 export default function SplitRegion() {
     const lc = useOutletContext<ListContext>()
@@ -29,7 +30,8 @@ export default function SplitRegion() {
             coordinateGetter: sortableKeyboardCoordinates,
           })
         )
-    let breakId = 0
+    // start at -1 so that the first break is id 0
+    let breakId = -1
     return (
         <div style={{
             display: 'flex',
@@ -49,7 +51,13 @@ export default function SplitRegion() {
                     >
                         {nateams.map((id) => {
                             breakId += 1
-                            return <TeamCard listContext={lc} id={id} breakId={breakId}/>
+                            return (
+                            <>
+                            <TeamCard listContext={lc} id={id} breakId={breakId}/>
+                            {/* should not render the very last tier break */}
+                            {breakId != nateams.length-1 ? <TierBreak listContext={lc} id={breakId} /> : null}
+                            </>
+                            )
                         })}
                     </SortableContext>
                 </div>
@@ -66,7 +74,13 @@ export default function SplitRegion() {
                     >
                         {apacteams.map((id) => {
                             breakId += 1
-                            return <TeamCard listContext={lc} id={id} breakId={breakId}/>
+                            return (
+                                <>
+                                <TeamCard listContext={lc} id={id} breakId={breakId}/>
+                                {/* should not render the very last tier break */}
+                                {breakId != (nateams.length+apacteams.length)-1 ? <TierBreak listContext={lc} id={breakId} /> : null}
+                                </>
+                                )
                         })}
                     </SortableContext>
                 </div>
@@ -87,6 +101,7 @@ export default function SplitRegion() {
                 format: 'split',
                 na: narr,
                 apac: list.apac,
+                combined: list.combined,
                 breaks: list.breaks
             })
             return narr
@@ -107,6 +122,7 @@ export default function SplitRegion() {
                 format: 'split',
                 na: list.na,
                 apac: narr,
+                combined: list.combined,
                 breaks: list.breaks
             })
             return narr

@@ -16,14 +16,15 @@ import {
   } from '@dnd-kit/core';
 import { ListContext } from '../Build';
 import { useOutletContext } from 'react-router-dom';
+import TierBreak from '../../Components/TierBreak';
 
-// TODO fix styles
+// TODO fix bottom margin
 
 export default function Combined() {
     const lc = useOutletContext<ListContext>()
     const [list, setList] = lc
-    const {na, apac} = list
-    const teams = na.concat(apac)
+    const {combined} = list
+    const teams = combined
     const [items, setItems] = useState(teams)
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -31,7 +32,7 @@ export default function Combined() {
             coordinateGetter: sortableKeyboardCoordinates,
           })
         )
-    let breakId = 0
+    let breakId = -1
     return (
         <div>
            <DndContext
@@ -45,7 +46,13 @@ export default function Combined() {
                 >
                         {items.map((id) => {
                             breakId++
-                            return <TeamCard id={id} listContext={lc} breakId={breakId} />
+                            return (
+                                <>
+                                <TeamCard listContext={lc} id={id} breakId={breakId}/>
+                                {/* should not render the very last tier break */}
+                                {breakId != items.length-1 ? <TierBreak listContext={lc} id={breakId} /> : null}
+                                </>
+                                )
                         })}
                 </SortableContext>
             </DndContext>
@@ -63,8 +70,9 @@ export default function Combined() {
             let narr = arrayMove(items, oldIndex, newIndex);
             setList({
                 format: 'combined',
-                na: narr,
+                na: list.na,
                 apac: list.apac,
+                combined: narr,
                 breaks: list.breaks
             })
             return narr

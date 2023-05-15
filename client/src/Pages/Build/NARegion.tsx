@@ -16,6 +16,7 @@ import {
   } from '@dnd-kit/core';
 import { ListContext } from '../Build';
 import { useOutletContext } from 'react-router-dom';
+import TierBreak from '../../Components/TierBreak';
 
 // TODO fix styles
 
@@ -30,7 +31,7 @@ export default function Combined() {
             coordinateGetter: sortableKeyboardCoordinates,
           })
         )
-    let breakId = 0
+    let breakId = -1
     return (
         <div>
            <DndContext
@@ -44,7 +45,13 @@ export default function Combined() {
                 >
                         {items.map((id) => {
                             breakId += 1
-                            return <TeamCard id={id} listContext={lc} breakId={breakId} />
+                            return (
+                                <>
+                                <TeamCard listContext={lc} id={id} breakId={breakId}/>
+                                {/* should not render the very last tier break */}
+                                {breakId != items.length-1 ? <TierBreak listContext={lc} id={breakId} /> : null}
+                                </>
+                                )
                         })}
                 </SortableContext>
             </DndContext>
@@ -64,6 +71,7 @@ export default function Combined() {
                 format: 'na',
                 na: narr,
                 apac: list.apac,
+                combined: list.combined,
                 breaks: list.breaks
             })
             return narr
