@@ -10,7 +10,6 @@ import (
 	"testing"
 
 	"github.com/mnrva-dev/owltier.com/server/auth"
-	"github.com/mnrva-dev/owltier.com/server/config"
 	"github.com/mnrva-dev/owltier.com/server/db"
 )
 
@@ -45,9 +44,6 @@ func TestRegister(t *testing.T) {
 	defer ts.Close()
 	data := url.Values{}
 	data.Set("username", testuser.Username)
-	if config.UsernamesEnabled() {
-		data.Set("username", testuser.Username)
-	}
 	data.Set("password", testuser.Password)
 	resp, err := http.PostForm(fmt.Sprintf("%s/register", ts.URL), data)
 	if err != nil {
@@ -69,9 +65,6 @@ func TestLogin(t *testing.T) {
 	defer ts.Close()
 	data := url.Values{}
 	data.Set("username", testuser.Username)
-	if config.UsernamesEnabled() {
-		data.Set("username", testuser.Username)
-	}
 	data.Set("password", testuser.Password)
 	resp, err := http.PostForm(fmt.Sprintf("%s/login", ts.URL), data)
 	if err != nil {

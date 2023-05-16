@@ -17,11 +17,3 @@ func DbGsiName() string {
 func DbGsiAttr() string {
 	return os.Getenv("DB_GSI_ATTR")
 }
-
-func UsernamesEnabled() bool {
-	if os.Getenv("CFG_USERNAMES_ENABLED") == "true" {
-		return true
-	} else {
-		return false
-	}
-}

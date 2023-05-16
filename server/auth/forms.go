@@ -6,7 +6,6 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/mnrva-dev/owltier.com/server/config"
 	passwordvalidator "github.com/wagslane/go-password-validator"
 )
 
@@ -20,13 +19,13 @@ type RequestForm struct {
 }
 
 func (h *RequestForm) validate() error {
-	if h.Username == "" && config.UsernamesEnabled() {
+	if h.Username == "" {
 		return errors.New("username is required")
 	}
 	if h.Password == "" {
 		return errors.New("password is required")
 	}
-	if !regexp.MustCompile(`^[a-zA-Z0-9-_]{3,24}$`).MatchString(h.Username) && config.UsernamesEnabled() {
+	if !regexp.MustCompile(`^[a-zA-Z0-9-_]{3,24}$`).MatchString(h.Username) {
 		return errors.New("username is not valid")
 	}
 	return passwordvalidator.Validate(h.Password, minPasswordEntropy)
@@ -37,10 +36,7 @@ func (h *RequestForm) Parse(r *http.Request) error {
 	if err != nil {
 		return err
 	}
-
-	if config.UsernamesEnabled() {
-		h.Username = strings.TrimSpace(r.FormValue("username"))
-	}
+	h.Username = strings.TrimSpace(r.FormValue("username"))
 	h.Password = strings.TrimSpace(r.FormValue("password"))
 	// truncate extremely long passwords
 	if len(h.Password) > 128 {
