@@ -7,7 +7,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/mnrva-dev/owltier.com/server/db"
 	"github.com/mnrva-dev/owltier.com/server/jsend"
-	"github.com/mnrva-dev/owltier.com/server/token"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -20,8 +19,8 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 	// get user from DB
 	var user = &db.UserSchema{}
-	err := db.FetchByGsi(&db.UserSchema{
-		Email: form.Email,
+	err := db.Fetch(&db.UserSchema{
+		Username: form.Username,
 	}, user)
 	// if we didnt get NotFound error...
 	if err == nil {
@@ -39,20 +38,10 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	user.Password = string(hashedPassword)
-	user.Email = form.Email
-	user.Id = uuid.New().String()
-	user.Scope = "default"
-	user.EmailIsVerified = false
 
-	accessT := token.GenerateAccess(user)
-	refreshT := token.GenerateRefresh(user)
-	if accessT == "" || refreshT == "" {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
-		return
-	}
+	session := uuid.NewString()
 
-	user.Refresh = refreshT
+	user.Session = session
 
 	err = db.Create(user)
 	if err != nil {
@@ -62,26 +51,14 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.SetCookie(w, &http.Cookie{
-		Name:     "_owltier_auth",
-		Value:    accessT,
+		Name:     SESSION_COOKIE,
+		Value:    session,
 		Path:     "/",
 		Expires:  time.Now().Add(time.Hour),
 		HttpOnly: true,
 		Secure:   true,
 	})
-	http.SetCookie(w, &http.Cookie{
-		Name:     "_owltier_refresh",
-		Value:    accessT,
-		Path:     "/",
-		Expires:  time.Now().Add(time.Hour),
-		HttpOnly: true,
-		Secure:   true,
+	jsend.Success(w, map[string]interface{}{
+		"username": user.Username,
 	})
-	if form.Redirect {
-		http.Redirect(w, r, form.RedirectUrl, 303)
-	} else {
-		jsend.Success(w, map[string]interface{}{
-			"id": user.Id,
-		})
-	}
 }

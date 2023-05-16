@@ -6,7 +6,6 @@ import (
 
 	"github.com/mnrva-dev/owltier.com/server/db"
 	"github.com/mnrva-dev/owltier.com/server/jsend"
-	"github.com/mnrva-dev/owltier.com/server/middleware"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -15,10 +14,23 @@ func DeleteAccount(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	password := strings.TrimSpace(r.FormValue("password"))
 
-	// get user from token parse middleware
-	user, err := r.Context().Value(middleware.ContextKeyValues).(*middleware.Values).GetUser()
+	// get user session id from cookies
+	sessC, err := r.Cookie(SESSION_COOKIE)
 	if err != nil {
-		jsend.Error(w, "Failed to retrieve user information")
+		jsend.Fail(w, 401, map[string]interface{}{
+			"session": "invalid session",
+		})
+		return
+	}
+	session := sessC.Value
+	var user = &db.UserSchema{}
+	err = db.FetchByGsi(&db.UserSchema{
+		Session: session,
+	}, user)
+	if err != nil {
+		jsend.Fail(w, 401, map[string]interface{}{
+			"session": "invalid session",
+		})
 		return
 	}
 

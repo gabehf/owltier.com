@@ -1,10 +1,8 @@
 package auth
 
 import (
-	"encoding/base64"
 	"errors"
 	"net/http"
-	"net/mail"
 	"regexp"
 	"strings"
 
@@ -17,11 +15,8 @@ const (
 )
 
 type RequestForm struct {
-	Username    string
-	Password    string
-	Email       string
-	Redirect    bool
-	RedirectUrl string
+	Username string
+	Password string
 }
 
 func (h *RequestForm) validate() error {
@@ -30,23 +25,6 @@ func (h *RequestForm) validate() error {
 	}
 	if h.Password == "" {
 		return errors.New("password is required")
-	}
-	if h.Email == "" {
-		return errors.New("email is required")
-	}
-	if _, err := mail.ParseAddress(h.Email); err != nil {
-		return errors.New("email address is not valid")
-	}
-	if h.Redirect {
-		if h.RedirectUrl == "" {
-			return errors.New("redirect url is required")
-		}
-		var url []byte
-		_, err := base64.NewDecoder(base64.StdEncoding, strings.NewReader(h.RedirectUrl)).Read(url)
-		if err != nil {
-			return err
-		}
-		h.RedirectUrl = string(url)
 	}
 	if !regexp.MustCompile(`^[a-zA-Z0-9-_]{3,24}$`).MatchString(h.Username) && config.UsernamesEnabled() {
 		return errors.New("username is not valid")
@@ -68,9 +46,6 @@ func (h *RequestForm) Parse(r *http.Request) error {
 	if len(h.Password) > 128 {
 		h.Password = h.Password[:128]
 	}
-	h.Email = strings.TrimSpace(r.FormValue("email"))
-	h.Redirect = r.FormValue("redirect") != "" || strings.ToLower(r.FormValue("redirect")) == "false"
-	h.RedirectUrl = strings.TrimSpace(r.FormValue("redirect_url"))
 
 	return h.validate()
 }

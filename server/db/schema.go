@@ -5,23 +5,18 @@ import (
 )
 
 type UserSchema struct {
-	Pk              string   `dynamodbav:"pk"`
-	Gsi1pk          string   `dynamodbav:"gsi1pk"`
-	Id              string   `dynamodbav:"id"`
-	Username        string   `dynamodbav:"username,omitempty"`
-	Email           string   `dynamodbav:"email"`
-	EmailIsVerified bool     `dynamodbav:"email_is_verified"`
-	Password        string   `dynamodbav:"password"`
-	Refresh         string   `dynamodbav:"refresh_token"`
-	Scope           string   `dynamodbav:"scope"`
-	Policies        []string `dynamodbav:"policies"`
-	CreatedAt       int64    `dynamodbav:"created_at"`
-	LastLoginAt     int64    `dynamodbav:"last_login_at"`
+	Pk          string `dynamodbav:"pk"`
+	Gsi1pk      string `dynamodbav:"gsi1pk"`
+	Session     string `dynamodbav:"session"`
+	Username    string `dynamodbav:"username"`
+	Password    string `dynamodbav:"password"`
+	CreatedAt   int64  `dynamodbav:"created_at"`
+	LastLoginAt int64  `dynamodbav:"last_login_at"`
 }
 
 func (u *UserSchema) buildKeys() {
-	u.Pk = "user#" + u.Id
-	u.Gsi1pk = "email#" + u.Email
+	u.Pk = "user#" + u.Username
+	u.Gsi1pk = "session#" + u.Session
 }
 
 func (u *UserSchema) getKey() map[string]types.AttributeValue {

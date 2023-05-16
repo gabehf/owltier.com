@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/mnrva-dev/owltier.com/server/db"
 	"github.com/mnrva-dev/owltier.com/server/jsend"
-	"github.com/mnrva-dev/owltier.com/server/token"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -19,44 +19,35 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	// get user from DB
 	var user = &db.UserSchema{}
-	err := db.FetchByGsi(&db.UserSchema{
-		Email: form.Email,
+	err := db.Fetch(&db.UserSchema{
+		Username: form.Username,
 	}, user)
 	if err != nil {
 		jsend.Fail(w, 401, map[string]interface{}{
-			"message": "Email or password is invalid"})
+			"message": "Username or password is invalid"})
 		return
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(form.Password))
 	if err != nil {
 		jsend.Fail(w, 401, map[string]interface{}{
-			"message": "Email or password is invalid"})
+			"message": "Username or password is invalid"})
 		return
 	}
 
 	// prepare login information for the client
-	accessT := token.GenerateAccess(user)
-	refreshT := token.GenerateRefresh(user)
-	db.Update(user, "refresh_token", refreshT)
+	session := uuid.NewString()
+	db.Update(user, "session", session)
 	db.Update(user, "last_login_at", time.Now().Unix())
 	http.SetCookie(w, &http.Cookie{
-		Name:     "_owltier.com_auth",
-		Value:    accessT,
-		Path:     "/",
-		Expires:  time.Now().Add(time.Hour),
-		HttpOnly: true,
-		Secure:   true,
-	})
-	http.SetCookie(w, &http.Cookie{
-		Name:     "_owltier.com_refresh",
-		Value:    accessT,
+		Name:     SESSION_COOKIE,
+		Value:    session,
 		Path:     "/",
 		Expires:  time.Now().Add(time.Hour),
 		HttpOnly: true,
 		Secure:   true,
 	})
 	jsend.Success(w, map[string]interface{}{
-		"id": user.Id,
+		"username": user.Username,
 	})
 }
