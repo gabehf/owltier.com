@@ -1,2 +1,4 @@
 .env*
-!.env.local
+!.env.example
+dev/db/data/*
+!dev/db/data/.keep

@@ -7,7 +7,7 @@ import (
 type UserSchema struct {
 	Pk          string `dynamodbav:"pk"`
 	Gsi1pk      string `dynamodbav:"gsi1pk"`
-	Session     string `dynamodbav:"session"`
+	Session     string `dynamodbav:"session_key"`
 	Username    string `dynamodbav:"username"`
 	Password    string `dynamodbav:"password"`
 	CreatedAt   int64  `dynamodbav:"created_at"`
@@ -16,7 +16,7 @@ type UserSchema struct {
 
 func (u *UserSchema) buildKeys() {
 	u.Pk = "user#" + u.Username
-	u.Gsi1pk = "session#" + u.Session
+	u.Gsi1pk = "session_key#" + u.Session
 }
 
 func (u *UserSchema) getKey() map[string]types.AttributeValue {

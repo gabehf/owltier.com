@@ -13,7 +13,7 @@ import (
 func Register(w http.ResponseWriter, r *http.Request) {
 	var form = &RequestForm{}
 	if err := form.Parse(r); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		jsend.ErrorWithCode(w, 400, "invalid form data")
 		return
 	}
 
@@ -24,8 +24,9 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	}, user)
 	// if we didnt get NotFound error...
 	if err == nil {
-		w.WriteHeader(http.StatusConflict)
-		w.Write([]byte("user already exists"))
+		jsend.Fail(w, http.StatusConflict, map[string]interface{}{
+			"username": "user with this username already exists",
+		})
 		return
 	} // TODO There is probably a better way to make sure this is just a
 	// "Not Found" error and not an actual error
@@ -34,7 +35,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	user.LastLoginAt = time.Now().Unix()
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(form.Password), bcrypt.DefaultCost)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		jsend.Error(w, "internal server error")
 		return
 	}
 	user.Password = string(hashedPassword)
@@ -42,6 +43,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	session := uuid.NewString()
 
 	user.Session = session
+	user.Username = form.Username
 
 	err = db.Create(user)
 	if err != nil {

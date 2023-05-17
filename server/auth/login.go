@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"log"
 	"net/http"
 	"time"
 
@@ -37,8 +38,19 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	// prepare login information for the client
 	session := uuid.NewString()
-	db.Update(user, "session", session)
+	err = db.Update(user, "session_key", session)
+	if err != nil {
+		log.Println(err)
+	}
+	// TODO: This is awful. Fix it later
+	err = db.Update(user, "gsi1pk", "session_key#"+session)
+	if err != nil {
+		log.Println(err)
+	}
 	db.Update(user, "last_login_at", time.Now().Unix())
+	if err != nil {
+		log.Println(err)
+	}
 	http.SetCookie(w, &http.Cookie{
 		Name:     SESSION_COOKIE,
 		Value:    session,
