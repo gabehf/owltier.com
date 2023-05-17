@@ -13,7 +13,7 @@ import (
 
 func Create(i DbItem) error {
 
-	i.buildKeys()
+	i.BuildKeys()
 
 	av, err := attributevalue.MarshalMap(i)
 	if err != nil {
@@ -32,11 +32,11 @@ func Create(i DbItem) error {
 // out must be a non-nil pointer
 func Fetch(i DbItem, out interface{}) error {
 
-	i.buildKeys()
+	i.BuildKeys()
 
 	o, err := handle.client.GetItem(context.TODO(), &dynamodb.GetItemInput{
 		TableName: aws.String(handle.table),
-		Key:       i.getKey(),
+		Key:       i.GetKeys(),
 	})
 	if err != nil {
 		return err
@@ -54,13 +54,13 @@ func Fetch(i DbItem, out interface{}) error {
 
 func FetchByGsi(i DbItem, out interface{}) error {
 
-	i.buildKeys()
+	i.BuildKeys()
 
 	o, err := handle.client.Query(context.TODO(), &dynamodb.QueryInput{
 		TableName:                 aws.String(handle.table),
 		IndexName:                 aws.String(handle.gsiName),
 		KeyConditionExpression:    aws.String(fmt.Sprintf("%s = :%s", handle.gsiAttr, handle.gsiAttr)),
-		ExpressionAttributeValues: i.getGsi(),
+		ExpressionAttributeValues: i.GetGsi(),
 	})
 	if err != nil {
 		return err
@@ -85,7 +85,7 @@ func Update(i DbItem, key string, value interface{}) error {
 	}
 	_, err = handle.client.UpdateItem(context.TODO(), &dynamodb.UpdateItemInput{
 		TableName:        aws.String(handle.table),
-		Key:              i.getKey(),
+		Key:              i.GetKeys(),
 		UpdateExpression: aws.String(fmt.Sprintf("set %s = :val", key)),
 		ExpressionAttributeValues: map[string]types.AttributeValue{
 			":val": val,
@@ -104,7 +104,7 @@ func MultiUpdate(i DbItem, keys []string, values []interface{}) error {
 
 func Delete(i DbItem) error {
 
-	k := i.getKey()
+	k := i.GetKeys()
 
 	_, err := handle.client.DeleteItem(context.TODO(), &dynamodb.DeleteItemInput{
 		TableName: aws.String(handle.table),

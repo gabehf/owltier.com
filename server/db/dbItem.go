@@ -5,7 +5,7 @@ import (
 )
 
 type DbItem interface {
-	buildKeys()
-	getKey() map[string]types.AttributeValue
-	getGsi() map[string]types.AttributeValue
+	BuildKeys()
+	GetKeys() map[string]types.AttributeValue
+	GetGsi() map[string]types.AttributeValue
 }

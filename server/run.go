@@ -13,6 +13,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/mnrva-dev/owltier.com/server/auth"
 	"github.com/mnrva-dev/owltier.com/server/config"
+	"github.com/mnrva-dev/owltier.com/server/list"
 )
 
 // boilerplate taken from go-chi on GitHub
@@ -75,6 +76,7 @@ func handler() http.Handler {
 	r.Use(middleware.Recoverer)
 
 	r.Mount("/auth", auth.BuildRouter())
+	r.Mount("/list", list.BuildRouter())
 
 	return r
 }

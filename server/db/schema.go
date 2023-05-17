@@ -14,20 +14,20 @@ type UserSchema struct {
 	LastLoginAt int64  `dynamodbav:"last_login_at"`
 }
 
-func (u *UserSchema) buildKeys() {
+func (u *UserSchema) BuildKeys() {
 	u.Pk = "user#" + u.Username
 	u.Gsi1pk = "session_key#" + u.Session
 }
 
-func (u *UserSchema) getKey() map[string]types.AttributeValue {
-	u.buildKeys()
+func (u *UserSchema) GetKeys() map[string]types.AttributeValue {
+	u.BuildKeys()
 	k := make(map[string]types.AttributeValue)
 	k["pk"] = &types.AttributeValueMemberS{Value: u.Pk}
 	return k
 }
 
-func (u *UserSchema) getGsi() map[string]types.AttributeValue {
-	u.buildKeys()
+func (u *UserSchema) GetGsi() map[string]types.AttributeValue {
+	u.BuildKeys()
 	k := make(map[string]types.AttributeValue)
 	k[":gsi1pk"] = &types.AttributeValueMemberS{Value: u.Gsi1pk}
 	return k
