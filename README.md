@@ -1,3 +1,5 @@
+Note: This repo was forked from my old github account
+
 # owltier.com
 An Overwatch League Tier List creator with extra features.
 ---
